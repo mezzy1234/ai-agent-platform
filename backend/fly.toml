@@ -1,0 +1,29 @@
+app = "ai-agent-backend"
+
+# Set a health check to ensure the app is running
+[checks]
+  [checks.http]
+    method = "get"
+    path = "/"
+    interval = "30s"
+    timeout = "5s"
+
+[build]
+  image = "node:18-bullseye"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "requests"
